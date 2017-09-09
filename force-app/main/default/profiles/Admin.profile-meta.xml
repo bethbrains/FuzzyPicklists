@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Profile xmlns="http://soap.sforce.com/2006/04/metadata">
+    <classAccesses>
+        <apexClass>FuzzyPicklists</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>MatchFuzzyPicklists</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <custom>false</custom>
     <fieldPermissions>
         <editable>false</editable>
-        <field>FuzzyPicklistMatch__mdt.Free_Text_Value__c</field>
+        <field>FuzzyPicklistPossibility__mdt.Match_String__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>FuzzyPicklistMatch__mdt.FuzzyPicklist__c</field>
+        <field>FuzzyPicklistValue__mdt.FuzzyPicklist__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>FuzzyPicklistMatch__mdt.Picklist_API_Value__c</field>
+        <field>FuzzyPicklistValue__mdt.Picklist_API_Value__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -32,7 +40,10 @@
         <readable>false</readable>
     </fieldPermissions>
     <layoutAssignments>
-        <layout>FuzzyPicklistMatch__mdt-FuzzyPicklistValue Layout</layout>
+        <layout>FuzzyPicklistPossibility__mdt-FuzzyPicklist Possibility Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>FuzzyPicklistValue__mdt-FuzzyPicklistValue Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>FuzzyPicklist__mdt-FuzzyPicklist Layout</layout>
@@ -553,6 +564,10 @@
     <userPermissions>
         <enabled>true</enabled>
         <name>ViewAllUsers</name>
+    </userPermissions>
+    <userPermissions>
+        <enabled>true</enabled>
+        <name>ViewDataAssessment</name>
     </userPermissions>
     <userPermissions>
         <enabled>true</enabled>

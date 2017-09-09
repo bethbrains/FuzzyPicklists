@@ -22,10 +22,6 @@
                 <behavior>Edit</behavior>
                 <field>Picklist_API_Value__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Free_Text_Value__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -65,6 +61,12 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
+    <relatedLists>
+        <fields>MasterLabel</fields>
+        <fields>DeveloperName</fields>
+        <fields>NamespacePrefix</fields>
+        <relatedList>FuzzyPicklistPossibility__mdt.FuzzyPicklistValue__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>

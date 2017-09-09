@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Object__c</fullName>
+    <fullName>FuzzyPicklistValue__c</fullName>
     <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
-    <label>Object</label>
-    <referenceTo>EntityDefinition</referenceTo>
-    <relationshipLabel>FuzzyPicklists</relationshipLabel>
-    <relationshipName>FuzzyPicklists</relationshipName>
+    <label>FuzzyPicklistValue</label>
+    <referenceTo>FuzzyPicklistValue__mdt</referenceTo>
+    <relationshipLabel>FuzzyPicklistPossibilities</relationshipLabel>
+    <relationshipName>FuzzyPicklist_Possibility</relationshipName>
     <required>true</required>
     <type>MetadataRelationship</type>
     <unique>false</unique>

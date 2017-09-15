@@ -6,7 +6,7 @@
     <label>FuzzyPicklistValue</label>
     <referenceTo>FuzzyPicklistValue__mdt</referenceTo>
     <relationshipLabel>FuzzyPicklistPossibilities</relationshipLabel>
-    <relationshipName>FuzzyPicklist_Possibility</relationshipName>
+    <relationshipName>FuzzyPicklistPossibilities</relationshipName>
     <required>true</required>
     <type>MetadataRelationship</type>
     <unique>false</unique>

@@ -9,6 +9,18 @@
         insert c;
         c = [SELECT id, CreatedDate FROM Contact WHERE Id = :c.Id];
         Datetime dt = System.now();
-        System.assertEquals(c.CreatedDate, dt);
+        Datetime dt2 = FuzzyPicklists.getDateTime(c,'CreatedDate');
+        System.assertEquals(dt.date(),dt2.date());
+    }
+    @istest public static void test_invocation(){
+        Contact c = new Contact(LastName='Smith');
+        insert c;
+        List<Id> ids = new List<Id>();
+        ids.add(c.id);
+        MatchFuzzyPicklists.matchPicklists(ids);
+        system.assert(true);
+    }
+    @istest public static void test_stringsMatch(){
+        System.assert(true,FuzzyPicklists.stringsMatch('yes','yes'));
     }
 }

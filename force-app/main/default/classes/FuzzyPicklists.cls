@@ -8,7 +8,7 @@ public class FuzzyPicklists {
         Map<Id, sObject> recordsToUpdate = new Map<Id, sObject>();
         //find full info from all IDs with
         //dynamic soql assembling free text field and picklist field as defined in fp
-        String query = buildBaseQueryString(fps)+' WHERE Id IN :recordIds';
+        String query = buildBaseQueryString(fps,recordIds)+' WHERE Id IN :recordIds';
         List<sObject> records = Database.query(query);
         //for each FP, pass to matchPicklist
         for(FuzzyPicklist__mdt fp : fps){
@@ -37,7 +37,7 @@ public class FuzzyPicklists {
                 for(FuzzyPicklistValue__mdt fpv : fpvs){
                     //make sure we're in the right fp since fpvs includes all fps for the object in question
                     if(fpv.FuzzyPicklist__c == fp.Id){
-                    	//loop FuzzyPicklistPossibility records comparing string value
+                        //loop FuzzyPicklistPossibility records comparing string value
                         for(FuzzyPicklistPossibility__mdt fpp : fpv.FuzzyPicklistPossibilities__r){
                             String textField = getString(rec,fp.Free_Text_Field__r.QualifiedAPIName);
                             if(stringsMatch(textField, fpp.Match_String__c)){
@@ -97,16 +97,18 @@ public class FuzzyPicklists {
                 WHERE FuzzyPicklist__c IN :fps];
     }
     
-    public static String buildBaseQueryString(List<FuzzyPicklist__mdt> fps){
-        String obj = fps[0].Object__c;
+    public static String buildBaseQueryString(List<FuzzyPicklist__mdt> fps, List<Id> recs){
+        String obj = recs[0].getSObjectType().getDescribe().getName();
         String query = 'SELECT Id, Name';
-        for(FuzzyPicklist__mdt fp : fps){
-            query += ', '+fp.Picklist_Field__r.QualifiedAPIName;
-            query += ', '+fp.Free_Text_Field__r.QualifiedAPIName;
-            query += ', '+fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName;
-            query += ', '+fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName;
+        if(fps.size()>0){
+            for(FuzzyPicklist__mdt fp : fps){
+                query += ', '+fp.Picklist_Field__r.QualifiedAPIName;
+                query += ', '+fp.Free_Text_Field__r.QualifiedAPIName;
+                query += ', '+fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName;
+                query += ', '+fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName;
+            }
         }
-        query += ' FROM '+obj;
+            query += ' FROM '+obj;
         system.debug(query);
         return query;
     }

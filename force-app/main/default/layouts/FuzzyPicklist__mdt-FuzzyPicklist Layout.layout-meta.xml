@@ -28,11 +28,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Match_Last_Evaluated_Date_Field__c</field>
+                <field>Match_Last_Evaluated_Date_Time_Field__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Text_Last_Populated_Date_Field__c</field>
+                <field>Text_Last_Populated_Date_Time_Field__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

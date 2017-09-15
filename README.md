@@ -28,7 +28,7 @@ Represents a single possible matching string for a given FuzzyPicklistValue.
 #### MatchFuzzyPicklists
 A public invocable method that can be called via process builder. Takes a set of Ids, or in the case of PB invocation, a single Id. 
 
-#### FuzzyPucklists
+#### FuzzyPicklists
 The brains of the operation. Takes a set of Ids [assumed to all be of the same object], finds all Fuzzy Picklists configured for that object, and checks each record to see if it needs to have any of its FPs updated. Updates happen if picklist value is null or if the free text field has been updated since the picklist was last evaluated (based on a corresponding datetime field for each field).
 If no match is found in the FPPs, the picklist is left blank (or cleared out in the case of anupdated text field) and it can be manually qualified and updated.
 

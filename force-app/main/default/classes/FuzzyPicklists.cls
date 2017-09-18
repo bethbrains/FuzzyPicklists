@@ -28,10 +28,14 @@ public class FuzzyPicklists {
             //only process if text has updated since last evaluation
             //or if picklist is still null
             Boolean matchFound = false;
-            Boolean newValueFound = getDateTime(rec,fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName) > 
+            Boolean newValueFound = true;
+            Boolean neverEvaluated = false;
+            if (fp.Text_Last_Populated_Date_Time_Field__c != null && fp.Match_Last_Evaluated_Date_Time_Field__c != null) {
+                newValueFound = getDateTime(rec,fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName) > 
                 getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName);
+                neverEvaluated = getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName) == null;
+            }
             Boolean picklistBlank = getString(rec,fp.Picklist_Field__r.QualifiedAPIName) == null;
-            Boolean neverEvaluated = getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName) == null;
             if(newValueFound || picklistBlank || neverEvaluated){
                 //loop fpvs
                 for(FuzzyPicklistValue__mdt fpv : fpvs){
@@ -104,8 +108,12 @@ public class FuzzyPicklists {
             for(FuzzyPicklist__mdt fp : fps){
                 query += ', '+fp.Picklist_Field__r.QualifiedAPIName;
                 query += ', '+fp.Free_Text_Field__r.QualifiedAPIName;
-                query += ', '+fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName;
-                query += ', '+fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName;
+                if(fp.Match_Last_Evaluated_Date_Time_Field__c != null) {
+                    query += ', '+fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName;
+                }
+                if(fp.Text_Last_Populated_Date_Time_Field__c != null) {
+                    query += ', '+fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName;
+                }
             }
         }
             query += ' FROM '+obj;

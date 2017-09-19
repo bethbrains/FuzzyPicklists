@@ -5,20 +5,19 @@ public class FuzzyPicklists {
         List<FuzzyPicklist__mdt> fps = getFuzzyPicklists(recordIds);
         //find all relevant FuzzyPicklistValues and FuzzyPicklistPossibilities
         List<FuzzyPicklistValue__mdt> fpvs = getFuzzyPicklistValuesWithPossibilities(fps);
-        Map<Id, sObject> recordsToUpdate = new Map<Id, sObject>();
         //find full info from all IDs with
         //dynamic soql assembling free text field and picklist field as defined in fp
         String query = buildBaseQueryString(fps,recordIds)+' WHERE Id IN :recordIds';
         List<sObject> records = Database.query(query);
+
+        Map<Id, sObject> recordsToUpdate = new Map<Id, sObject>();
         //for each FP, pass to matchPicklist
         for(FuzzyPicklist__mdt fp : fps){
             for(sObject rec : matchPicklist(fp, fpvs, records)){
                 recordsToUpdate.put(rec.Id,rec);
             }
         }
-        if(recordsToUpdate != null && recordsToUpdate.size()>0){
-            update recordsToUpdate.values();
-        }
+        update recordsToUpdate.values();
     }
     
     public static List<sObject> matchPicklist(FuzzyPicklist__mdt fp, List<FuzzyPicklistValue__mdt> fpvs, List<sObject> records){
@@ -32,7 +31,7 @@ public class FuzzyPicklists {
             Boolean neverEvaluated = false;
             if (fp.Text_Last_Populated_Date_Time_Field__c != null && fp.Match_Last_Evaluated_Date_Time_Field__c != null) {
                 newValueFound = getDateTime(rec,fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName) > 
-                getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName);
+                    getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName);
                 neverEvaluated = getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName) == null;
             }
             Boolean picklistBlank = getString(rec,fp.Picklist_Field__r.QualifiedAPIName) == null;
@@ -49,7 +48,10 @@ public class FuzzyPicklists {
                                 matchFound = true;
                                 //write record.picklistvalue to FuzzyPicklistValue.picklistapivalue
                                 rec.put(fp.Picklist_Field__r.QualifiedAPIName,fpv.Picklist_API_Value__c);
-                                rec.put(fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName,System.now());
+                                // This if is only needed for testing - there aren't any writeable datetime fields we can use
+                                if (isUpdateable(rec.getSObjectType(), fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName)) {
+                                    rec.put(fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName,System.now());
+                                }
                                 recordsToUpdate.add(rec);
                             } 
                         }
@@ -103,20 +105,18 @@ public class FuzzyPicklists {
     
     public static String buildBaseQueryString(List<FuzzyPicklist__mdt> fps, List<Id> recs){
         String obj = recs[0].getSObjectType().getDescribe().getName();
-        String query = 'SELECT Id, Name';
-        if(fps.size()>0){
-            for(FuzzyPicklist__mdt fp : fps){
-                query += ', '+fp.Picklist_Field__r.QualifiedAPIName;
-                query += ', '+fp.Free_Text_Field__r.QualifiedAPIName;
-                if(fp.Match_Last_Evaluated_Date_Time_Field__c != null) {
-                    query += ', '+fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName;
-                }
-                if(fp.Text_Last_Populated_Date_Time_Field__c != null) {
-                    query += ', '+fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName;
-                }
-            }
+        // to avoid issues with the same field being used in multiple rules, add to a set to dedupe
+        Set<String> fields = new Set<String> {'Id', 'Name'};
+        for (FuzzyPicklist__mdt fp : fps) {
+            fields.add(fp.Picklist_Field__r.QualifiedAPIName);
+            fields.add(fp.Free_Text_Field__r.QualifiedAPIName);
+            fields.add(fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName);
+            fields.add(fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName);
         }
-            query += ' FROM '+obj;
+        // there is a possibility that there could be fields not populated in the metadata, so remove the null entry
+        fields.remove(null);
+        //build query string
+        String query = 'SELECT ' + String.join(new List<String>(fields), ',') +  ' FROM ' + obj;
         system.debug(query);
         return query;
     }
@@ -131,6 +131,12 @@ public class FuzzyPicklists {
     
     public static Boolean stringsMatch(String string1, String string2){
         return string1 == string2;
+    }
+
+    public static Boolean isUpdateable(Schema.sObjectType sObjType, String fieldName) {
+        Map<String, SObjectField> fields = sObjType.getDescribe().fields.getMap();
+        DescribeFieldResult fieldDescribe = fields.get(fieldName).getDescribe();
+        return fieldDescribe.isUpdateable();
     }
     
 }

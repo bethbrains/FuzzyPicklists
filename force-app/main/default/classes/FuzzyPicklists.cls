@@ -130,6 +130,7 @@ public class FuzzyPicklists {
     }
     
     public static Boolean stringsMatch(String string1, String string2){
+        //TODO: add regex evaluation
         return string1 == string2;
     }
 

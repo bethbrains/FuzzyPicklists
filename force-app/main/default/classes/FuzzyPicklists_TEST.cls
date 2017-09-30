@@ -23,4 +23,16 @@
     @istest public static void test_stringsMatch(){
         System.assert(true,FuzzyPicklists.stringsMatch('yes','yes'));
     }
+
+    @isTest
+    public static void test_mockedCMDT() {
+        CMDTUtil mockCMDT = (CMDTUtil) Test.createStub(CMDTUtil.class, new CMDTMockProvider());
+        FuzzyPicklists.cmdtUtil = mockCMDT;
+        Contact c = new Contact(LastName='Smith');
+        insert c;
+        List<Id> ids = new List<Id>();
+        ids.add(c.id);
+        MatchFuzzyPicklists.matchPicklists(ids);
+        system.assert(true);
+    }
 }

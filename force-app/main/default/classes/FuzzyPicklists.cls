@@ -42,6 +42,7 @@ public class FuzzyPicklists {
             Boolean matchFound = false;
             Boolean newValueFound = true;
             Boolean neverEvaluated = false;
+            System.debug(fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName);
             if (fp.Text_Last_Populated_Date_Time_Field__c != null && fp.Match_Last_Evaluated_Date_Time_Field__c != null) {
                 newValueFound = getDateTime(rec,fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName) > 
                     getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName);

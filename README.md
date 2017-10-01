@@ -10,6 +10,8 @@ Obviously the pattern here applies beyond demographic fields to anywhere where f
 
 At a high level, on any object, you have a free text field and a picklist field. When the free text field is updated, the app checks the org's own "dictionary" of known possible values for the text field and finds the corresponding categorized value and puts it in a corresponding picklist field. Both the free text value and the categorized value are retained on the record. Hooray!
 
+[![Deploy](https://deploy-to-sfdx.com/dist/assets/images/DeployToSFDX.svg)](https://deploy-to-sfdx.com)
+
 ## How to Create a New Fuzzy Picklist
 
 ### Object Configuration

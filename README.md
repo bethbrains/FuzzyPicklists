@@ -28,8 +28,8 @@ For each FP,
 3. For each possible string match for each FPV, create a FuzzyPicklistPossibility, looking up to the corresponding FPV. 
 
 ### Automation Configuration 
-1. For each object with a FP, create a new Process that fires on create or edit.
-2. Create a node for each FP free text field, checking if the text value has changed. If it has, execute a record update the free text datetime field with NOW(). Have each node continue evaluating, not stop. 
+1. For each object with a FP, create a new Process Builder that fires on create or edit.
+2. Create a node for each FP free text field, checking if the text value has changed. If it has, execute a record update the free text datetime field with NOW(). Have each criteria node continue evaluating, not stop. 
 3. Create a final node with no criteria* that calls apex "Match Fuzzy Picklists" and passes the record Id in to variable "recordId".
 *This works because the code makes sure each picklist field needs updating before updating it, but it could slow save times on records. Best practice for performance tbd. 
 
@@ -43,13 +43,16 @@ Set up a list view for each object or FP to surface records that didn't match on
 ### Custom Metadata Types
 
 #### FuzzyPicklist
-Represents a single FP, with lookups to the object and four related fields. 
+1. Represents a single FP, with lookups to the object and four related fields.
+    1. Suggested naming convention- objectName:FuzzyPicklistName
 
 #### FuzzyPicklistValue
-Represents a single possible categorized value for a given FP. 
+1. Represents a single possible categorized value for a given FP.
+    1. Suggested naming convention- FuzzyPicklistName:Value
 
 #### FuzzyPicklistPossibility
-Represents a single possible matching string for a given FuzzyPicklistValue. 
+1. Represents a single possible matching string for a given FuzzyPicklistValue. 
+    1. Suggested naming convention- FuzzyPicklistName:Value:Possibility
 
 ### Apex Classes
 

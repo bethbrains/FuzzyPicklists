@@ -10,7 +10,12 @@ Obviously the pattern here applies beyond demographic fields to anywhere where f
 
 At a high level, on any object, you have a free text field and a picklist field. When the free text field is updated, the app checks the org's own "dictionary" of known possible values for the text field and finds the corresponding categorized value and puts it in a corresponding picklist field. Both the free text value and the categorized value are retained on the record. Hooray!
 
-[![Deploy](https://deploy-to-sfdx.com/dist/assets/images/DeployToSFDX.svg)](https://deploy-to-sfdx.com)
+## Install
+
+1. <img>[![Deploy](https://deploy-to-sfdx.com/dist/assets/images/DeployToSFDX.svg)](https://deploy-to-sfdx.com)</img>
+2. Login with your dev hub org. 
+3. Automation will fire to create a new scratch org with this repo installed.
+4. *Please note it may take a few minutes for the scratch org to be ready for use.*
 
 ## How to Create a New Fuzzy Picklist
 

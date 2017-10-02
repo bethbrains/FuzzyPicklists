@@ -19,7 +19,7 @@ public with sharing class CMDTUtil {
         
     }
 
-    public List<FuzzyPicklistValue__mdt> getFuzzyPicklistValuesWithPossibilities(List<FuzzyPicklist__mdt> fps){
+    public List<FuzzyPicklistValue__mdt> getFuzzyPicklistValuesWithPossibilities(List<FuzzyPicklist__mdt> fps){  
         return [SELECT Id
                 , DeveloperName
                 , Picklist_API_Value__c

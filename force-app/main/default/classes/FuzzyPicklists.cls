@@ -49,6 +49,10 @@ public class FuzzyPicklists {
                 neverEvaluated = getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName) == null;
             }
             Boolean picklistBlank = getString(rec,fp.Picklist_Field__r.QualifiedAPIName) == null;
+            System.debug('picklistBlank: ' + picklistBlank);
+            System.debug('matchFound: ' + matchFound);
+            System.debug('newValueFound: ' + newValueFound);
+            System.debug('neverEvaluated: ' + neverEvaluated);
             if(newValueFound || picklistBlank || neverEvaluated){
                 //loop fpvs
                 for(FuzzyPicklistValue__mdt fpv : fpvs){
@@ -77,7 +81,10 @@ public class FuzzyPicklists {
             //may want this behind a setting.
             if(!matchFound && newValueFound && !picklistBlank){
                 rec.put(fp.Picklist_Field__r.QualifiedAPIName,null);
-                rec.put(fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName,System.now());
+                // This if is only needed for testing - there aren't any writeable datetime fields we can use
+                if (isUpdateable(rec.getSObjectType(), fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName)) {
+                    rec.put(fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName,System.now());
+                }
                 recordsToUpdate.add(rec);
             }
         }

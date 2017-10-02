@@ -20,15 +20,7 @@ public with sharing class CMDTMockProvider implements System.StubProvider {
     }
 
     private Object buildFPValues() {
-        String fpvjson = '[{"Id":"fpv1Id"';
-        fpvjson += ',"DeveloperName":"Web"';
-        fpvjson += ',"Picklist_API_Value__c":"Web"';
-        fpvjson += ',"FuzzyPicklist__c":"fpId"}';
-        fpvjson += ',{"Id":"fpv2Id"';
-        fpvjson += ',"DeveloperName":"Other"';
-        fpvjson += ',"Picklist_API_Value__c":"Other"';
-        fpvjson += ',"FuzzyPicklist__c":"fpId"';
-        fpvjson += '}]';
+        String fpvjson = '[{"attributes":{"type":"FuzzyPicklistValue__mdt","url":"/services/data/v40.0/sobjects/FuzzyPicklistValue__mdt/m011F00000000hjQAA"},"Id":"m011F00000000hjQAA","DeveloperName":"Web","Picklist_API_Value__c":"Web","FuzzyPicklist__c":"m021F00000002PcQAI","FuzzyPicklistPossibilities__r":{"totalSize":1,"done":true,"records":[{"attributes":{"type":"FuzzyPicklistPossibility__mdt","url":"/services/data/v40.0/sobjects/FuzzyPicklistPossibility__mdt/m001F00000000j1QAA"},"FuzzyPicklistValue__c":"m011F00000000hjQAA","Id":"m001F00000000j1QAA","DeveloperName":"Smith","Match_String__c":"Smith"}]}}]';
         return (List<FuzzyPicklistValue__mdt>) JSON.deserialize(fpvjson, List<FuzzyPicklistValue__mdt>.class );
     }
 }

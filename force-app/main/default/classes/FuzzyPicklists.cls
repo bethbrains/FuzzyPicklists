@@ -1,10 +1,23 @@
 public class FuzzyPicklists {
+
+    // This property allows us to mock the return of Custom Metadata Types in tests 
+    @testVisible
+    private static CMDTUtil cmdtUtil {
+        get {
+            if (cmdtUtil == null) {
+                cmdtUtil = new CMDTUtil();
+            }
+            return cmdtUtil;
+        }
+        set;
+    }
     
     public static void matchAllPicklists(List<Id> recordIds){
         //find all MDTs for the object
-        List<FuzzyPicklist__mdt> fps = getFuzzyPicklists(recordIds);
+        List<FuzzyPicklist__mdt> fps = cmdtUtil.getFuzzyPicklists(recordIds);
+        System.debug(fps);
         //find all relevant FuzzyPicklistValues and FuzzyPicklistPossibilities
-        List<FuzzyPicklistValue__mdt> fpvs = getFuzzyPicklistValuesWithPossibilities(fps);
+        List<FuzzyPicklistValue__mdt> fpvs = cmdtUtil.getFuzzyPicklistValuesWithPossibilities(fps);
         //find full info from all IDs with
         //dynamic soql assembling free text field and picklist field as defined in fp
         String query = buildBaseQueryString(fps,recordIds)+' WHERE Id IN :recordIds';
@@ -29,12 +42,17 @@ public class FuzzyPicklists {
             Boolean matchFound = false;
             Boolean newValueFound = true;
             Boolean neverEvaluated = false;
+            System.debug(fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName);
             if (fp.Text_Last_Populated_Date_Time_Field__c != null && fp.Match_Last_Evaluated_Date_Time_Field__c != null) {
                 newValueFound = getDateTime(rec,fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName) > 
                     getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName);
                 neverEvaluated = getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName) == null;
             }
             Boolean picklistBlank = getString(rec,fp.Picklist_Field__r.QualifiedAPIName) == null;
+            System.debug('picklistBlank: ' + picklistBlank);
+            System.debug('matchFound: ' + matchFound);
+            System.debug('newValueFound: ' + newValueFound);
+            System.debug('neverEvaluated: ' + neverEvaluated);
             if(newValueFound || picklistBlank || neverEvaluated){
                 //loop fpvs
                 for(FuzzyPicklistValue__mdt fpv : fpvs){
@@ -63,44 +81,14 @@ public class FuzzyPicklists {
             //may want this behind a setting.
             if(!matchFound && newValueFound && !picklistBlank){
                 rec.put(fp.Picklist_Field__r.QualifiedAPIName,null);
-                rec.put(fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName,System.now());
+                // This if is only needed for testing - there aren't any writeable datetime fields we can use
+                if (isUpdateable(rec.getSObjectType(), fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName)) {
+                    rec.put(fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName,System.now());
+                }
                 recordsToUpdate.add(rec);
             }
         }
         return recordsToUpdate;
-    }
-    
-    public static List<FuzzyPicklist__mdt> getFuzzyPicklists(List<Id> recordIds){
-        String obj = String.valueof(recordIds[0].getSObjectType());
-        return [SELECT Id
-                , DeveloperName 
-                , Object__c
-                , Free_Text_Field__c
-                , Picklist_Field__c
-                , Match_Last_Evaluated_Date_Time_Field__c
-                , Text_Last_Populated_Date_Time_Field__c
-                , Free_Text_Field__r.QualifiedAPIName
-                , Picklist_Field__r.QualifiedAPIName
-                , Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName
-                , Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName
-                FROM FuzzyPicklist__mdt
-                WHERE Object__c = :obj
-               ];
-        
-    }
-    
-    public static List<FuzzyPicklistValue__mdt> getFuzzyPicklistValuesWithPossibilities(List<FuzzyPicklist__mdt> fps){
-        return [SELECT Id
-                , DeveloperName
-                , Picklist_API_Value__c
-                , FuzzyPicklist__c
-                , (SELECT Id
-                   , DeveloperName
-                   , Match_String__c  
-                   , FuzzyPicklistValue__c
-                   FROM FuzzyPicklistPossibilities__r)
-                FROM FuzzyPicklistValue__mdt
-                WHERE FuzzyPicklist__c IN :fps];
     }
     
     public static String buildBaseQueryString(List<FuzzyPicklist__mdt> fps, List<Id> recs){

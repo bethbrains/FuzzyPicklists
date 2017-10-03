@@ -44,14 +44,10 @@
         We can't assert on the values that are returned because Custom Metadata Types are always visible to tests.
         There is no way of knowing if the org has created their own entries or not, so we can't predict the number
         or records returned or what their values might be. */
-        CMDTUtil cmdtUtil = new CMDTUtil();
+        CMDTUtil cmdtUtil = FuzzyPicklists.cmdtUtil;
         Contact c = new Contact(LastName='Smith');
         insert c;
         List<FuzzyPicklist__mdt> fp = cmdtUtil.getFuzzyPicklists(new List<Id>{c.Id});
         cmdtUtil.getFuzzyPicklistValuesWithPossibilities(fp);
-
-        // Get code coverage by creating an instance of the FuzzyPicklists class and getting the cmdtUtil property.
-        FuzzyPicklists fpClass = new FuzzyPicklists();
-        fpClass.cmdtUtil;
     }
 }

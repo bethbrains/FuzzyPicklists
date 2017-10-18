@@ -4,7 +4,9 @@ Do it right or don't bother.
 
 ## Installation Links
 Current release: v1.0
+
 [Production/Developer Orgs](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t1I000001K4f5)
+
 [Sandbox Orgs](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t1I000001K4f5)
 
 ## Doing Demographics Right

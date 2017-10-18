@@ -2,6 +2,10 @@
 So you want a demographic field?
 Do it right or don't bother.
 
+## Installation Links
+[https://login.salesforce.com/packaging/installPackage.apexp?p0=04t1I000001K4f5](Production/Developer Orgs)
+[	https://test.salesforce.com/packaging/installPackage.apexp?p0=04t1I000001K4f5](Sandbox Orgs)
+
 ## Doing Demographics Right
 
 The words we use to describe ourselves are important. Organizations should allow constituents to self-identify on key demographics in their own terms. Organizations have a conflicting need to report categorized demographic information to funders and others who need high level overviews of constituent populations. FuzzyPicklists allows organizations to retain a constituent's own identity words *and* pull categorized information for funder reports easily. 

@@ -3,8 +3,9 @@ So you want a demographic field?
 Do it right or don't bother.
 
 ## Installation Links
-[https://login.salesforce.com/packaging/installPackage.apexp?p0=04t1I000001K4f5](Production/Developer Orgs)
-[	https://test.salesforce.com/packaging/installPackage.apexp?p0=04t1I000001K4f5](Sandbox Orgs)
+Current release: v1.0
+[Production/Developer Orgs](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t1I000001K4f5)
+[Sandbox Orgs](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t1I000001K4f5)
 
 ## Doing Demographics Right
 

@@ -15,7 +15,6 @@ public class FuzzyPicklists {
     public static void matchAllPicklists(List<Id> recordIds){
         //find all MDTs for the object
         List<FuzzyPicklist__mdt> fps = cmdtUtil.getFuzzyPicklists(recordIds);
-        System.debug(fps);
         //find all relevant FuzzyPicklistValues and FuzzyPicklistPossibilities
         List<FuzzyPicklistValue__mdt> fpvs = cmdtUtil.getFuzzyPicklistValuesWithPossibilities(fps);
         //find full info from all IDs with
@@ -42,17 +41,12 @@ public class FuzzyPicklists {
             Boolean matchFound = false;
             Boolean newValueFound = true;
             Boolean neverEvaluated = false;
-            System.debug(fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName);
             if (fp.Text_Last_Populated_Date_Time_Field__c != null && fp.Match_Last_Evaluated_Date_Time_Field__c != null) {
                 newValueFound = getDateTime(rec,fp.Text_Last_Populated_Date_Time_Field__r.QualifiedAPIName) > 
                     getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName);
                 neverEvaluated = getDateTime(rec,fp.Match_Last_Evaluated_Date_Time_Field__r.QualifiedAPIName) == null;
             }
             Boolean picklistBlank = getString(rec,fp.Picklist_Field__r.QualifiedAPIName) == null;
-            System.debug('picklistBlank: ' + picklistBlank);
-            System.debug('matchFound: ' + matchFound);
-            System.debug('newValueFound: ' + newValueFound);
-            System.debug('neverEvaluated: ' + neverEvaluated);
             if(newValueFound || picklistBlank || neverEvaluated){
                 //loop fpvs
                 for(FuzzyPicklistValue__mdt fpv : fpvs){
@@ -105,7 +99,6 @@ public class FuzzyPicklists {
         fields.remove(null);
         //build query string
         String query = 'SELECT ' + String.join(new List<String>(fields), ',') +  ' FROM ' + obj;
-        system.debug(query);
         return query;
     }
     

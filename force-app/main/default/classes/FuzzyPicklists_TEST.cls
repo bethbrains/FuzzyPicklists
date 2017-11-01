@@ -30,7 +30,7 @@
         system.assertEquals('Web', c.LeadSource);
 
         // Need to delay an update to Contact as we are comparing created date and last modified date
-        for(Integer i = 0; i<1000000; i++) {}
+        for(Integer i = 0; i<10000000; i++) {}
         c.LastName='Smythe';
         update c;
         MatchFuzzyPicklists.matchPicklists(ids);
